@@ -23,6 +23,7 @@ func _physics_process(delta):
 	var query = PhysicsRayQueryParameters2D.create(current_pos, next_pos)
 	query.collide_with_bodies = true
 	query.collide_with_areas = true
+	query.hit_from_inside = true # CRITICAL: Detect if we start inside or overlap perfectly
 	# Exclude shooter (if we had a reference) and self
 	query.exclude = [self] 
 	
@@ -31,6 +32,7 @@ func _physics_process(delta):
 	if result:
 		# Hit something!
 		var body = result.collider
+		print("RayCast Hit: ", body.name, " Group: ", body.get_groups()) # DEBUG
 		
 		# Manual filtering (since we can't easily exclude group via query without RID)
 		if body.is_in_group("player"):
