@@ -17,7 +17,7 @@ script = ExtResource("2_camera")
 position = Vector2(576, 600)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor"]
-shape = SubResource("WorldBoundaryShape2D_1"]
+shape = SubResource("WorldBoundaryShape2D_1")
 
 [node name="ColorRect" type="ColorRect" parent="Floor"]
 anchors_preset = 8
