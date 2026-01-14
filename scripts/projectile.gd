@@ -13,22 +13,33 @@ func _ready():
 	body_entered.connect(_on_body_entered)
 
 func _physics_process(delta):
-	position += transform.x * speed * delta
+	var space_state = get_world_2d().direct_space_state
+	var current_pos = global_position
+	var next_pos = current_pos + transform.x * speed * delta
 	
-	# Manual check for overlaps (Fallback for high speed)
-	var overlaps = get_overlapping_bodies()
-	if overlaps.size() > 0:
-		print("Projectil Overlaps: ", overlaps)
-	for body in overlaps:
-		_on_body_entered(body)
+	# Raycast from current to next position to detect hits between frames (prevents tunneling)
+	var query = PhysicsRayQueryParameters2D.create(current_pos, next_pos)
+	query.collide_with_bodies = true
+	query.collide_with_areas = true
+	# Exclude shooter (if we had a reference) and self
+	query.exclude = [self] 
+	
+	var result = space_state.intersect_ray(query)
+	
+	if result:
+		# Hit something!
+		var body = result.collider
+		
+		# Manual filtering (since we can't easily exclude group via query without RID)
+		if body.is_in_group("player"):
+			position = next_pos # Pass through player
+		else:
+			position = result.position # Move to hit point
+			_on_hit(body)
+	else:
+		position = next_pos
 
-@export var impact_effect_scene: PackedScene
-
-func _on_body_entered(body):
-	# Ignore collision with the shooter (if setup correctly via layers/masks, but safe guard here)
-	if body.is_in_group("player"): 
-		return
-
+func _on_hit(body):
 	# Start Impact Effect
 	if impact_effect_scene:
 		var impact = impact_effect_scene.instantiate()
@@ -38,8 +49,13 @@ func _on_body_entered(body):
 
 	print("Hit: ", body.name)
 	
-	# TODO: Apply Damage if body has "take_damage" method
 	if body.has_method("take_damage"):
 		body.take_damage(damage)
 	
 	queue_free()
+
+func _on_body_entered(body):
+	# Keep Area2D check just in case, but rely mainly on RayCast
+	if body.is_in_group("player"): 
+		return
+	_on_hit(body)
