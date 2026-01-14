@@ -45,6 +45,7 @@ func _physics_process(delta):
 			
 			if body.is_in_group("player") or body == shooter:
 				# Hit player/shooter -> Add to exclusions and retry from same spot
+				print("Hit Player/Shooter, retrying exclusion...") # DEBUG
 				exclusions.append(body)
 				max_retries -= 1
 				continue
