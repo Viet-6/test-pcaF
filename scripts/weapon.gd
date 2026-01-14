@@ -6,13 +6,14 @@ class_name Weapon
 @export var damage: int = 10
 @export var projectile_speed: float = 1000.0
 
+@export var projectile_scene: PackedScene
+@export var muzzle_flash_scene: PackedScene
+
 var can_fire: bool = true
 @onready var muzzle = $Muzzle
 
 func _process(_delta):
 	look_at(get_global_mouse_position())
-
-@export var projectile_scene: PackedScene
 
 func shoot():
 	if not can_fire:
@@ -20,8 +21,6 @@ func shoot():
 	
 	print("Bang!")
 	
-@export var muzzle_flash_scene: PackedScene
-
 	if projectile_scene:
 		var projectile = projectile_scene.instantiate()
 		projectile.global_position = muzzle.global_position
