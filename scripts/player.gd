@@ -43,8 +43,16 @@ func _physics_process(delta):
 
 	# Get the input direction and handle the movement/deceleration.
 	var direction = Input.get_axis("move_left", "move_right")
-	# print("Input Direction: ", direction) # Debug
-	if direction:
+	
+	# Fallback: Check raw keys if InputMap fails
+	if direction == 0:
+		if Input.is_physical_key_pressed(KEY_A) or Input.is_physical_key_pressed(KEY_LEFT):
+			direction -= 1
+		if Input.is_physical_key_pressed(KEY_D) or Input.is_physical_key_pressed(KEY_RIGHT):
+			direction += 1
+			
+	if direction != 0:
+		print("Moving! Direction: ", direction) # DEBUG: Confirm input reception
 		velocity.x = direction * SPEED
 		# Flip sprite based on direction
 		sprite.flip_h = direction < 0
@@ -52,7 +60,7 @@ func _physics_process(delta):
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 
 	# Handle Shooting
-	if Input.is_action_pressed("fire"):
+	if Input.is_action_pressed("fire") or Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 		# Assuming a child node named "Weapon" exists
 		if has_node("Weapon"):
 			$Weapon.shoot()
