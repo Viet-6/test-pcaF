@@ -24,7 +24,7 @@ func _physics_process(delta):
 	# This implicitly ignores Layer 2 (Player), solving the self-hit issue perfectly.
 	var query = PhysicsRayQueryParameters2D.create(current_pos, next_pos)
 	query.collide_with_bodies = true
-	query.collide_with_areas = true
+	query.collide_with_areas = false # Projectiles shouldn't hit other Areas (like triggers or bullets)
 	query.collision_mask = 5 # 1 (Floor) + 4 (Enemy)
 	query.hit_from_inside = true
 	
