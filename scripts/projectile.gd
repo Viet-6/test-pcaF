@@ -4,6 +4,8 @@ extends Area2D
 @export var damage: int = 10
 @export var lifetime: float = 2.0
 
+@export var impact_effect_scene: PackedScene
+
 func _ready():
 	# Auto-destroy after lifetime to prevent memory leaks
 	var timer = get_tree().create_timer(lifetime)
