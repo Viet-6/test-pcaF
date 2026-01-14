@@ -20,32 +20,45 @@ func _physics_process(delta):
 	var current_pos = global_position
 	var next_pos = current_pos + transform.x * speed * delta
 	
-	# Raycast from current to next position to detect hits between frames (prevents tunneling)
-	var query = PhysicsRayQueryParameters2D.create(current_pos, next_pos)
-	query.collide_with_bodies = true
-	query.collide_with_areas = true
-	query.hit_from_inside = true 
-	
-	# Exclude shooter and self
+	# Raycast loop to handle penetration (e.g. passing through shooter)
+	var ray_start = current_pos
+	var ray_end = next_pos
+	var collision_found = false
 	var exclusions = [self]
 	if shooter:
 		exclusions.append(shooter)
-	query.exclude = exclusions
-	
-	var result = space_state.intersect_ray(query)
-	
-	if result:
-		# Hit something!
-		var body = result.collider
-		print("RayCast Hit: ", body.name, " Group: ", body.get_groups()) # DEBUG
 		
-		# Manual filtering (since we can't easily exclude group via query without RID)
-		if body.is_in_group("player"):
-			position = next_pos # Pass through player
+	var max_retries = 3 # Prevent infinite loops
+	
+	while max_retries > 0:
+		var query = PhysicsRayQueryParameters2D.create(ray_start, ray_end)
+		query.collide_with_bodies = true
+		query.collide_with_areas = true
+		query.hit_from_inside = true
+		query.exclude = exclusions
+		
+		var result = space_state.intersect_ray(query)
+		
+		if result:
+			var body = result.collider
+			print("RayCast Hit: ", body.name, " Group: ", body.get_groups())
+			
+			if body.is_in_group("player") or body == shooter:
+				# Hit player/shooter -> Add to exclusions and retry from same spot
+				exclusions.append(body)
+				max_retries -= 1
+				continue
+			else:
+				# Hit valid target
+				position = result.position
+				_on_hit(body)
+				collision_found = true
+				break
 		else:
-			position = result.position # Move to hit point
-			_on_hit(body)
-	else:
+			# No hit
+			break
+			
+	if not collision_found:
 		position = next_pos
 
 func _on_hit(body):
