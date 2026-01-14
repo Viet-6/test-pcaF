@@ -20,6 +20,15 @@ func _physics_process(delta):
 	var current_pos = global_position
 	var next_pos = current_pos + transform.x * speed * delta
 	
+	# Update Trail
+	if has_node("Trail"):
+		var trail = $Trail
+		trail.add_point(Vector2.ZERO)
+		# Keep trail shortish
+		if trail.get_point_count() > 10:
+			trail.remove_point(0)
+		# Detach trail origin from rotation if needed, but local space is fine here if just visual tail
+	
 	# Raycast using Collision Mask 5 (Layer 1:Floor + Layer 3:Enemy)
 	# This implicitly ignores Layer 2 (Player), solving the self-hit issue perfectly.
 	var query = PhysicsRayQueryParameters2D.create(current_pos, next_pos)
