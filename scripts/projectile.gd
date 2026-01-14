@@ -5,6 +5,7 @@ extends Area2D
 @export var lifetime: float = 2.0
 
 @export var impact_effect_scene: PackedScene
+var shooter: Node2D
 
 func _ready():
 	# Auto-destroy after lifetime to prevent memory leaks
@@ -23,9 +24,13 @@ func _physics_process(delta):
 	var query = PhysicsRayQueryParameters2D.create(current_pos, next_pos)
 	query.collide_with_bodies = true
 	query.collide_with_areas = true
-	query.hit_from_inside = true # CRITICAL: Detect if we start inside or overlap perfectly
-	# Exclude shooter (if we had a reference) and self
-	query.exclude = [self] 
+	query.hit_from_inside = true 
+	
+	# Exclude shooter and self
+	var exclusions = [self]
+	if shooter:
+		exclusions.append(shooter)
+	query.exclude = exclusions
 	
 	var result = space_state.intersect_ray(query)
 	

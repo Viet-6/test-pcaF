@@ -25,6 +25,12 @@ func shoot():
 		var projectile = projectile_scene.instantiate()
 		projectile.global_position = muzzle.global_position
 		projectile.global_rotation = global_rotation
+		
+		# Assign shooter if possible (Weapon is child of Player?)
+		var owner_node = get_parent()
+		if owner_node:
+			projectile.shooter = owner_node
+			
 		get_tree().root.add_child(projectile)
 	
 	# Muzzle Flash
