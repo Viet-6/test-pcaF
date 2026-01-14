@@ -28,6 +28,13 @@ func _physics_process(delta):
 	query.collision_mask = 5 # 1 (Floor) + 4 (Enemy)
 	query.hit_from_inside = true
 	
+	# DEBUG: Scan everything to see what is inconsistent
+	var debug_query = PhysicsRayQueryParameters2D.create(current_pos, next_pos)
+	debug_query.collide_with_bodies = true
+	var debug_result = space_state.intersect_ray(debug_query)
+	if debug_result:
+		print("DEBUG RAY HIT: ", debug_result.collider.name, " Layer: ", debug_result.collider.collision_layer)
+	
 	var result = space_state.intersect_ray(query)
 	
 	if result:
