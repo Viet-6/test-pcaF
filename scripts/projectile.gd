@@ -17,6 +17,8 @@ func _physics_process(delta):
 	
 	# Manual check for overlaps (Fallback for high speed)
 	var overlaps = get_overlapping_bodies()
+	if overlaps.size() > 0:
+		print("Projectil Overlaps: ", overlaps)
 	for body in overlaps:
 		_on_body_entered(body)
 
