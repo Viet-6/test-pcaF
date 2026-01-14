@@ -66,3 +66,5 @@ func _physics_process(delta):
 			$Weapon.shoot()
 
 	move_and_slide()
+	if direction != 0:
+		print("Pos: ", global_position, " Vel: ", velocity)

@@ -4,7 +4,8 @@
 [ext_resource type="Script" path="res://scripts/camera_shake.gd" id="2_camera"]
 [ext_resource type="Script" path="res://scripts/input_setup.gd" id="3_setup"]
 
-[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_1"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
+size = Vector2(2000, 20)
 
 [node name="TestLevel" type="Node2D"]
 script = ExtResource("3_setup")
@@ -19,7 +20,7 @@ script = ExtResource("2_camera")
 position = Vector2(576, 600)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor"]
-shape = SubResource("WorldBoundaryShape2D_1")
+shape = SubResource("RectangleShape2D_1")
 
 [node name="ColorRect" type="ColorRect" parent="Floor"]
 anchors_preset = 8
