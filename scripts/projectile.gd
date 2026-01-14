@@ -33,6 +33,7 @@ func _physics_process(delta):
 	if result:
 		# Hit something valid (Player is ignored by mask)
 		var body = result.collider
+		print("Hit Object: ", body.name, " | Layer: ", body.collision_layer)
 		position = result.position
 		_on_hit(body)
 	else:
