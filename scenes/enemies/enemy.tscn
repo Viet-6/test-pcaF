@@ -1,10 +1,10 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=4 format=3 uid="uid://enemy_scene_123"]
 
 [ext_resource type="Script" path="res://scripts/enemy.gd" id="1_enemy"]
 [ext_resource type="Texture2D" path="res://icon.svg" id="2_icon"]
 
-[sub_resource type="RectangleShape2D" id="1"]
-size = Vector2(100, 200)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_enemy"]
+size = Vector2(100, 100)
 
 [node name="Enemy" type="CharacterBody2D"]
 collision_layer = 4
@@ -12,8 +12,8 @@ collision_mask = 3
 script = ExtResource("1_enemy")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(1, 0.301961, 0.301961, 1)
 texture = ExtResource("2_icon")
-modulate = Color(1, 0.3, 0.3, 1) # Red tint
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("1")
+shape = SubResource("RectangleShape2D_enemy")
