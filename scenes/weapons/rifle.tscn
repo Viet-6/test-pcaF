@@ -1,10 +1,14 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://scripts/weapon.gd" id="1_weapon"]
 [ext_resource type="Texture2D" path="res://icon.svg" id="2_icon"]
+[ext_resource type="PackedScene" path="res://scenes/weapons/projectile.tscn" id="3_projectile"]
+[ext_resource type="PackedScene" path="res://scenes/weapons/muzzle_flash.tscn" id="4_flash"]
 
 [node name="Rifle" type="Node2D"]
 script = ExtResource("1_weapon")
+projectile_scene = ExtResource("3_projectile")
+muzzle_flash_scene = ExtResource("4_flash")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(20, 0)

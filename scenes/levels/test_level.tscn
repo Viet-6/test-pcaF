@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="1_player"]
+[ext_resource type="Script" path="res://scripts/camera_shake.gd" id="2_camera"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_1"]
 
@@ -9,11 +10,14 @@
 [node name="Player" parent="." instance=ExtResource("1_player")]
 position = Vector2(576, 324)
 
+[node name="Camera2D" type="Camera2D" parent="Player"]
+script = ExtResource("2_camera")
+
 [node name="Floor" type="StaticBody2D" parent="."]
 position = Vector2(576, 600)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor"]
-shape = SubResource("WorldBoundaryShape2D_1")
+shape = SubResource("WorldBoundaryShape2D_1"]
 
 [node name="ColorRect" type="ColorRect" parent="Floor"]
 anchors_preset = 8

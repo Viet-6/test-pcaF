@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/one_shot_particles.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://icon.svg" id="2_icon"]
+
+[node name="ImpactEffect" type="CPUParticles2D"]
+emitting = false
+amount = 12
+lifetime = 0.3
+one_shot = true
+explosiveness = 1.0
+texture = ExtResource("2_icon")
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 100.0
+initial_velocity_max = 300.0
+scale_amount_min = 0.02
+scale_amount_max = 0.05
+color = Color(0.5, 2, 3, 1) # HDR Cyan
+script = ExtResource("1_script")
