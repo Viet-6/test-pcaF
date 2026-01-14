@@ -9,11 +9,12 @@ class_name Weapon
 @export var projectile_scene: PackedScene
 @export var muzzle_flash_scene: PackedScene
 
-var can_fire: bool = true
+@export var is_player_controlled: bool = true
 @onready var muzzle = $Muzzle
 
 func _process(_delta):
-	look_at(get_global_mouse_position())
+	if is_player_controlled:
+		look_at(get_global_mouse_position())
 
 func shoot():
 	if not can_fire:
