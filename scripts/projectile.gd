@@ -14,6 +14,11 @@ func _ready():
 
 func _physics_process(delta):
 	position += transform.x * speed * delta
+	
+	# Manual check for overlaps (Fallback for high speed)
+	var overlaps = get_overlapping_bodies()
+	for body in overlaps:
+		_on_body_entered(body)
 
 @export var impact_effect_scene: PackedScene
 

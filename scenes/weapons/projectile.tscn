@@ -8,6 +8,10 @@
 size = Vector2(30, 6)
 
 [node name="Projectile" type="Area2D"]
+collision_layer = 0
+collision_mask = 1
+monitoring = true
+monitorable = false
 script = ExtResource("1_projectile")
 impact_effect_scene = ExtResource("3_impact")
 
