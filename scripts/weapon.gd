@@ -33,6 +33,7 @@ func shoot():
 		flash.global_position = muzzle.global_position
 		flash.global_rotation = global_rotation
 		get_tree().root.add_child(flash)
+		flash.emitting = true
 	
 	# Screen Shake
 	var camera = get_viewport().get_camera_2d()

@@ -27,6 +27,7 @@ func _on_body_entered(body):
 		var impact = impact_effect_scene.instantiate()
 		impact.global_position = global_position
 		get_tree().root.add_child(impact)
+		impact.emitting = true
 
 	print("Hit: ", body.name)
 	

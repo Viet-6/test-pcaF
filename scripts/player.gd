@@ -9,6 +9,28 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 func _ready():
 	add_to_group("player")
+	_setup_inputs()
+
+func _setup_inputs():
+	# Failsafe: Ensure actions exist even if project settings fail
+	var actions = {
+		"move_left": [KEY_A, KEY_LEFT],
+		"move_right": [KEY_D, KEY_RIGHT],
+		"jump": [KEY_SPACE, KEY_UP],
+		"fire": [MOUSE_BUTTON_LEFT]
+	}
+	for action in actions:
+		if not InputMap.has_action(action):
+			InputMap.add_action(action)
+			for key in actions[action]:
+				var event
+				if typeof(key) == TYPE_INT and key < 10:
+					event = InputEventMouseButton.new()
+					event.button_index = key
+				else:
+					event = InputEventKey.new()
+					event.keycode = key
+				InputMap.action_add_event(action, event)
 
 func _physics_process(delta):
 	# Add the gravity.
@@ -21,6 +43,7 @@ func _physics_process(delta):
 
 	# Get the input direction and handle the movement/deceleration.
 	var direction = Input.get_axis("move_left", "move_right")
+	# print("Input Direction: ", direction) # Debug
 	if direction:
 		velocity.x = direction * SPEED
 		# Flip sprite based on direction
