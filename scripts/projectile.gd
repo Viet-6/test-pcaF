@@ -20,46 +20,22 @@ func _physics_process(delta):
 	var current_pos = global_position
 	var next_pos = current_pos + transform.x * speed * delta
 	
-	# Raycast loop to handle penetration (e.g. passing through shooter)
-	var ray_start = current_pos
-	var ray_end = next_pos
-	var collision_found = false
-	var exclusions = [self]
-	if shooter:
-		exclusions.append(shooter)
-		
-	var max_retries = 3 # Prevent infinite loops
+	# Raycast using Collision Mask 5 (Layer 1:Floor + Layer 3:Enemy)
+	# This implicitly ignores Layer 2 (Player), solving the self-hit issue perfectly.
+	var query = PhysicsRayQueryParameters2D.create(current_pos, next_pos)
+	query.collide_with_bodies = true
+	query.collide_with_areas = true
+	query.collision_mask = 5 # 1 (Floor) + 4 (Enemy)
+	query.hit_from_inside = true
 	
-	while max_retries > 0:
-		var query = PhysicsRayQueryParameters2D.create(ray_start, ray_end)
-		query.collide_with_bodies = true
-		query.collide_with_areas = true
-		query.hit_from_inside = true
-		query.exclude = exclusions
-		
-		var result = space_state.intersect_ray(query)
-		
-		if result:
-			var body = result.collider
-			print("RayCast Hit: ", body.name, " Group: ", body.get_groups())
-			
-			if body.is_in_group("player") or body == shooter:
-				# Hit player/shooter -> Add to exclusions and retry from same spot
-				print("Hit Player/Shooter, retrying exclusion...") # DEBUG
-				exclusions.append(body)
-				max_retries -= 1
-				continue
-			else:
-				# Hit valid target
-				position = result.position
-				_on_hit(body)
-				collision_found = true
-				break
-		else:
-			# No hit
-			break
-			
-	if not collision_found:
+	var result = space_state.intersect_ray(query)
+	
+	if result:
+		# Hit something valid (Player is ignored by mask)
+		var body = result.collider
+		position = result.position
+		_on_hit(body)
+	else:
 		position = next_pos
 
 func _on_hit(body):
