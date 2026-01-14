@@ -24,6 +24,7 @@ position = Vector2(900, 520)
 script = ExtResource("2_camera")
 
 [node name="Floor" type="StaticBody2D" parent="."]
+collision_layer = 1
 position = Vector2(576, 600)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor"]
